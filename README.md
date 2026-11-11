@@ -6,6 +6,8 @@ A fork of [R0STEFAN/Vivaldi-Tree-Style-Tabs](https://github.com/R0STEFAN/Vivaldi
 
 This fork tracks upstream **v2.3.8** and differs in two ways: the Gemini AI integration is removed, and the Linux install targets Debian-based systems.
 
+**This fork is source-only: it publishes no prebuilt releases.** Build it yourself with `npm run build` (see [Installation](#installation)).
+
 ## What's different in this fork
 
 ### Gemini AI tab grouping removed
@@ -28,7 +30,7 @@ Upstream's Linux installer set up a pacman hook. This fork replaces it with an A
 
 ### Not changed, but worth knowing
 
-- The Windows auto-updater (`updater/`) now checks **this fork's** GitHub releases (`proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini`) instead of upstream's. It only finds an update once a release exists on this repository: the `Release Build` workflow builds `mod.zip` and `svb-updater.exe` when a `v*` tag is pushed. Until then it reports an error rather than falling back to upstream. It is untested here, as there is no Windows machine or Go toolchain involved in this fork's development.
+- The Windows auto-updater (`updater/`) now checks **this fork's** GitHub releases (`proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini`) instead of upstream's, so it never pulls in Gemini. Because this fork publishes no releases, a self-compiled updater has nothing to download and will report an error when checking for updates. Its Vivaldi-update watching still works, since it patches using the `custom.js` embedded when you built it. Do not use upstream's prebuilt `svb-updater.exe`: it installs the Gemini version.
 - The macOS and Windows scripts are inherited from upstream and are untested here.
 
 ## What It Does (inherited from upstream)
@@ -66,21 +68,24 @@ dist/custom.js
 
 ### Windows
 
-> **Fork note:** `svb-updater.exe` follows this fork's releases, which only exist once a `v*` tag has been pushed here. Until then, use the manual patcher below with a locally built `dist/custom.js`.
+> **Fork note:** there are no prebuilt `svb-updater.exe` or `mod.zip` downloads for this fork. Build from source, then use the patcher below, or compile the updater yourself.
 
-The recommended way to install and maintain the mod on Windows is the native **Auto-Updater** (`svb-updater.exe`). It sits quietly in your system tray, detects when Vivaldi updates, and automatically re-applies the mod for you. It also notifies you of new mod updates from GitHub!
+**Patch with the batch script (simplest):**
+1. Run `npm install` and `npm run build`.
+2. Double-click `patch-windows.bat` (or run it from CMD/PowerShell). It detects your Vivaldi path, copies `custom.js`, and injects the script.
+3. *Note: you will need to run it again after every browser update.*
 
-**Auto-updater:**
-
-1. Download the `svb-updater.exe` file from this fork's [Releases](https://github.com/proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini/releases) page.
-2. Place the file in a permanent folder where you want to keep it (e.g., `Documents\VivaldiTreeTabs`).
-3. Run `svb-updater.exe`. It will automatically download the required mod files from GitHub, find your Vivaldi installation, and apply the mod.
-4. *(Optional)* Right-click the tray icon and enable "Run on Startup" to ensure Vivaldi is always patched automatically.
-
-**Manual Patcher (Alternative)**
-If you are building from source or prefer not to use the background updater:
-- Double-click `patch-windows.bat` or run it from CMD/PowerShell. It will automatically detect your Vivaldi path, copy `custom.js`, and inject the script.
-- *Note: You will need to run `patch-windows.bat` manually after every browser update.*
+**Compile the auto-updater yourself (optional, needs Go 1.21+):**
+The updater sits in your system tray, detects Vivaldi updates, and re-applies the mod from the `custom.js` embedded in it. The files are embedded at build time, so copy them in first:
+```cmd
+npm run build
+copy dist\custom.js updater\
+copy dist\svb-folder.html updater\
+cd updater
+go mod tidy
+go build -ldflags "-H=windowsgui" -o svb-updater.exe .
+```
+Rebuild the updater after each mod rebuild to refresh the embedded files.
 
 **Uninstallation (Windows)**
 To cleanly remove the mod from Vivaldi:
