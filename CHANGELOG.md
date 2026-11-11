@@ -1,3 +1,11 @@
+# Unreleased
+
+## 🗑️ Removed
+
+* **Gemini AI Tab Grouping**: Removed the Gemini integration (API client, header AI button, settings panel, and toast notifications). Saved `geminiApiKey`, `geminiModel` and `geminiFolderLanguage` settings are deleted from storage on load. The v2.3.0 notes below are kept for history.
+
+---
+
 # Release Notes (v2.3.8)
 
 ## 🛠️ Fixes & Improvements

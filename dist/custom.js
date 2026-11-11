@@ -1736,220 +1736,6 @@ body.svb-is-resizing {
   color: var(--svb-text);
 }
 
-#svb-root .svb-settings-section-divider {
-  margin: 16px 0 12px;
-  height: 1px;
-  background: var(--svb-border);
-}
-
-#svb-root .svb-settings-title-sub {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--svb-accent);
-  margin-bottom: 10px;
-}
-
-#svb-root .svb-settings-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-#svb-root .svb-settings-label-row .svb-settings-label {
-  margin-bottom: 0;
-}
-
-#svb-root .svb-settings-link,
-#svb-root .svb-settings-link-btn {
-  font-size: 11px;
-  color: var(--svb-accent);
-  text-decoration: none;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  padding: 0;
-  font-weight: 500;
-}
-
-#svb-root .svb-settings-link:hover,
-#svb-root .svb-settings-link-btn:hover {
-  text-decoration: underline;
-}
-
-#svb-root .svb-settings-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 5px 8px;
-  min-height: 28px;
-  min-width: 0;
-  border: 1px solid var(--svb-border);
-  border-radius: var(--svb-radius);
-  background: var(--svb-panel);
-  color: var(--svb-text);
-  font: inherit;
-  font-size: 12px;
-  outline: none;
-  transition: border-color var(--svb-d-fast) ease, background var(--svb-d-fast) ease;
-}
-
-#svb-root .svb-settings-input:focus {
-  border-color: var(--svb-accent);
-}
-
-#svb-root .svb-settings-key-actions {
-  display: flex;
-  margin-top: 6px;
-}
-
-#svb-root .svb-settings-button-small {
-  padding: 4px 10px;
-  min-height: 26px;
-  border: 1px solid var(--svb-border);
-  border-radius: var(--svb-radius);
-  background: var(--svb-panel);
-  color: var(--svb-text);
-  cursor: pointer;
-  font: inherit;
-  font-size: 11px;
-  font-weight: 500;
-  transition: background var(--svb-d-fast) ease, border-color var(--svb-d-fast) ease;
-}
-
-#svb-root .svb-settings-button-small:hover {
-  background: var(--svb-panel-hover);
-  border-color: var(--svb-accent);
-}
-
-@keyframes svb-sparkle-pulse {
-  0% { transform: scale(1) rotate(0deg); opacity: 0.85; }
-  50% { transform: scale(1.15) rotate(180deg); opacity: 1; filter: drop-shadow(0 0 4px var(--svb-accent)); }
-  100% { transform: scale(1) rotate(360deg); opacity: 0.85; }
-}
-
-@keyframes svb-spinner-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-#svb-root .svb-icon-button[data-role="ai-group-tabs"] .svb-sparkles-icon {
-  width: 14px;
-  height: 14px;
-  display: block;
-}
-
-#svb-root .svb-icon-button[data-role="ai-group-tabs"] .svb-ai-spinner-icon {
-  width: 14px;
-  height: 14px;
-  display: block;
-  animation: svb-spinner-rotate 0.75s linear infinite;
-  color: var(--svb-accent);
-}
-
-#svb-root .svb-icon-button[data-role="ai-group-tabs"].is-loading {
-  cursor: wait;
-}
-
-/* Toast Notifications */
-#svb-root .svb-toast-host {
-  position: absolute;
-  top: 40px;
-  left: 8px;
-  right: 8px;
-  z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-}
-
-#svb-root .svb-toast {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding: 8px 12px;
-  border-radius: var(--svb-radius);
-  font-size: 11.5px;
-  line-height: 1.35;
-  font-weight: 500;
-  color: var(--svb-text);
-  background: var(--svb-panel, #2d3136);
-  border: 1px solid var(--svb-border);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(10px);
-  animation: svb-toast-in 0.22s var(--svb-ease-out) forwards;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-#svb-root .svb-toast.is-hiding {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-#svb-root .svb-toast--success {
-  border-color: rgba(52, 199, 89, 0.4);
-  background: linear-gradient(135deg, rgba(52, 199, 89, 0.18), var(--svb-panel, #2d3136));
-}
-
-#svb-root .svb-toast--warning {
-  border-color: rgba(255, 159, 10, 0.4);
-  background: linear-gradient(135deg, rgba(255, 159, 10, 0.18), var(--svb-panel, #2d3136));
-}
-
-#svb-root .svb-toast--error {
-  border-color: rgba(255, 69, 58, 0.4);
-  background: linear-gradient(135deg, rgba(255, 69, 58, 0.18), var(--svb-panel, #2d3136));
-}
-
-#svb-root .svb-toast--info {
-  border-color: rgba(71, 207, 255, 0.4);
-  background: linear-gradient(135deg, rgba(71, 207, 255, 0.18), var(--svb-panel, #2d3136));
-}
-
-#svb-root .svb-toast__message {
-  flex: 1;
-  word-break: break-word;
-}
-
-#svb-root .svb-toast__close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  padding: 0;
-  margin-left: 4px;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  color: var(--svb-text-muted);
-  cursor: pointer;
-  font-size: 15px;
-  line-height: 1;
-  transition: color var(--svb-d-fast) ease, background var(--svb-d-fast) ease;
-}
-
-#svb-root .svb-toast__close:hover {
-  color: var(--svb-text-strong);
-  background: var(--svb-panel-hover);
-}
-
-@keyframes svb-toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 #svb-root .svb-settings-options {
   display: flex;
   flex-direction: column;
@@ -2253,9 +2039,21 @@ const DEFAULT_SETTINGS = {
   autoCloseTabsDays: 0,
   newTabPlacement: 'bottom',
   autoHideMode: 'full',
-  geminiApiKey: '',
-  geminiModel: 'gemini-2.5-flash',
-  geminiFolderLanguage: 'uk',
+}
+
+// Keys from the removed Gemini integration; dropped on load so a stored API key does not linger.
+const LEGACY_SETTING_KEYS = ['geminiApiKey', 'geminiModel', 'geminiFolderLanguage']
+
+function stripLegacySettings(settings) {
+  const cleaned = { ...settings }
+  let changed = false
+  for (const key of LEGACY_SETTING_KEYS) {
+    if (key in cleaned) {
+      delete cleaned[key]
+      changed = true
+    }
+  }
+  return { cleaned, changed }
 }
 
 function createSettingsStore() {
@@ -2303,7 +2101,9 @@ function createSettingsStore() {
       try {
         const saved = localStorage.getItem(SETTINGS_KEY)
         if (saved) {
-          currentSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) }
+          const { cleaned, changed } = stripLegacySettings(JSON.parse(saved))
+          currentSettings = { ...DEFAULT_SETTINGS, ...cleaned }
+          if (changed) localStorage.setItem(SETTINGS_KEY, JSON.stringify(currentSettings))
         }
       } catch (e) {}
       return
@@ -2312,12 +2112,14 @@ function createSettingsStore() {
     try {
       const saved = await storageGet(area, SETTINGS_KEY)
       if (saved) {
-        currentSettings = { ...DEFAULT_SETTINGS, ...saved }
+        const { cleaned, changed } = stripLegacySettings(saved)
+        currentSettings = { ...DEFAULT_SETTINGS, ...cleaned }
+        if (changed) await storageSet(area, { [SETTINGS_KEY]: currentSettings })
       } else {
         // Migration from localStorage
         const legacy = localStorage.getItem(SETTINGS_KEY)
         if (legacy) {
-          currentSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(legacy) }
+          currentSettings = { ...DEFAULT_SETTINGS, ...stripLegacySettings(JSON.parse(legacy)).cleaned }
           await storageSet(area, { [SETTINGS_KEY]: currentSettings })
         }
       }
@@ -4894,328 +4696,11 @@ module.exports = {
 }
 
     },
-    "services/gemini-api.js": function(require, module, exports) {
-const FALLBACK_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-8b',
-  'gemini-2.5-pro',
-]
-
-const FOLDER_COLORS = ['blue', 'purple', 'rose', 'orange', 'yellow', 'green', 'teal', 'grey']
-
-const LANGUAGE_LABELS = {
-  uk: 'Ukrainian',
-  en: 'English',
-  de: 'German',
-  pl: 'Polish',
-  es: 'Spanish',
-  fr: 'French',
-  auto: 'Automatic (match primary language of tabs)',
-}
-
-const BLOCKED_PROTOCOLS = new Set([
-  'vivaldi:',
-  'chrome:',
-  'chrome-extension:',
-  'file:',
-  'about:',
-  'data:',
-  'javascript:',
-  'view-source:',
-])
-
-function sanitizeTabForPrompt(tab) {
-  if (!tab || typeof tab !== 'object' || !tab.url || typeof tab.url !== 'string') {
-    return null
-  }
-
-  let parsedUrl
-  try {
-    parsedUrl = new URL(tab.url)
-  } catch (_e) {
-    return null
-  }
-
-  if (BLOCKED_PROTOCOLS.has(parsedUrl.protocol) || !['http:', 'https:'].includes(parsedUrl.protocol)) {
-    return null
-  }
-
-  const hostname = parsedUrl.hostname.toLowerCase()
-  const domain = parsedUrl.hostname.replace(/^www\./i, '')
-  let cleanTitle = typeof tab.title === 'string' ? tab.title.trim() : ''
-
-  // Detect search queries (Google, Bing, DuckDuckGo, Brave, Ecosia, Yandex)
-  let isSearchQuery = false
-  let searchTopic = ''
-
-  const isGoogle = (hostname.includes('google.') && (parsedUrl.pathname === '/search' || parsedUrl.searchParams.has('q')))
-  const isBing = (hostname.includes('bing.com') && (parsedUrl.pathname === '/search' || parsedUrl.searchParams.has('q')))
-  const isDuckDuckGo = (hostname.includes('duckduckgo.com') && parsedUrl.searchParams.has('q'))
-  const isBrave = (hostname.includes('brave.com') && parsedUrl.searchParams.has('q'))
-  const isEcosia = (hostname.includes('ecosia.org') && parsedUrl.searchParams.has('q'))
-  const isYandex = (hostname.includes('yandex.') && (parsedUrl.pathname === '/search' || parsedUrl.searchParams.has('text')))
-
-  if (isGoogle || isBing || isDuckDuckGo || isBrave || isEcosia || isYandex) {
-    isSearchQuery = true
-    const rawQuery = isYandex ? parsedUrl.searchParams.get('text') : parsedUrl.searchParams.get('q')
-    if (rawQuery && typeof rawQuery === 'string') {
-      searchTopic = rawQuery.trim().slice(0, 100)
-    }
-
-    // Strip search engine branding from title
-    cleanTitle = cleanTitle.replace(/\s*[-–—|•]\s*(Пошук Google|Google Search|Поиск в Google|Google Suche|Google|DuckDuckGo|Bing Search|Bing|Ecosia|Brave Search)\s*$/i, '')
-    cleanTitle = cleanTitle.replace(/^(Google Search|DuckDuckGo|Bing):\s*/i, '')
-    if (!cleanTitle && searchTopic) {
-      cleanTitle = searchTopic
-    }
-    if (!searchTopic && cleanTitle) {
-      searchTopic = cleanTitle
-    }
-  }
-
-  const title = (cleanTitle || domain).slice(0, 120)
-
-  const result = {
-    id: Number(tab.id),
-    title,
-    domain,
-  }
-
-  if (isSearchQuery && searchTopic) {
-    result.searchTopic = searchTopic
-    result.isSearchQuery = true
-  }
-
-  return result
-}
-
-function sanitizeFolderName(rawName) {
-  if (typeof rawName !== 'string') return ''
-  let name = rawName.trim()
-
-  // Separate Cyrillic and Latin script collisions (e.g. пошукIQ -> пошук IQ) without splitting camelCase (YouTube, GitHub)
-  name = name.replace(/([а-яіїєґА-ЯІЇЄҐ])([a-zA-Z])/g, '$1 $2')
-  name = name.replace(/([a-zA-Z])([а-яіїєґА-ЯІЇЄҐ])/g, '$1 $2')
-
-  // Remove repetitive number sequences (e.g. 00111222...)
-  name = name.replace(/[0-9]{3,}/g, '')
-
-  // Remove repeated character bursts (e.g. 4+ of the same char)
-  name = name.replace(/(.)\1{3,}/g, '$1')
-
-  // Remove runaway concatenated words without spaces (>= 18 chars)
-  name = name.replace(/\b\S{18,}\b/g, '')
-
-  // Normalize spaces
-  name = name.replace(/\s+/g, ' ').trim()
-
-  // Strict length limit: up to 35 characters cleanly truncated at word boundary
-  if (name.length > 35) {
-    const cut = name.slice(0, 35)
-    const lastSpace = cut.lastIndexOf(' ')
-    name = lastSpace > 8 ? cut.slice(0, lastSpace) : cut
-  }
-
-  return name.trim()
-}
-
-async function fetchAvailableModels(apiKey, fetchFn = globalThis.fetch) {
-  if (!apiKey || typeof apiKey !== 'string' || !apiKey.trim()) {
-    return FALLBACK_MODELS.slice()
-  }
-
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey.trim())}`
-    const res = await fetchFn(url, { method: 'GET' })
-    if (!res.ok) {
-      return FALLBACK_MODELS.slice()
-    }
-
-    const data = await res.json()
-    if (!data || !Array.isArray(data.models)) {
-      return FALLBACK_MODELS.slice()
-    }
-
-    const models = data.models
-      .filter(m => Array.isArray(m.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent'))
-      .map(m => m.name.replace(/^models\//, ''))
-      .filter(name => name.includes('gemini') && !name.includes('vision') && !name.includes('embedding'))
-
-    return models.length > 0 ? models : FALLBACK_MODELS.slice()
-  } catch (error) {
-    console.warn('[svb-gemini] failed to fetch available models', error)
-    return FALLBACK_MODELS.slice()
-  }
-}
-
-async function groupTabsWithGemini(options) {
-  const {
-    apiKey,
-    model = 'gemini-2.5-flash',
-    language = 'uk',
-    ungroupedTabs = [],
-    existingFolders = [],
-    fetchFn = globalThis.fetch,
-  } = options || {}
-
-  if (!apiKey || typeof apiKey !== 'string' || !apiKey.trim()) {
-    throw new Error('Gemini API key is required')
-  }
-
-  const safeTabs = ungroupedTabs.map(sanitizeTabForPrompt).filter(Boolean)
-  if (safeTabs.length === 0) {
-    return { groups: [] }
-  }
-
-  const langInstruction = LANGUAGE_LABELS[language] || language || 'Ukrainian'
-
-  const promptPayload = {
-    systemInstruction: {
-      parts: [
-        {
-          text: [
-            `You are an expert browser tab organizer for Tree Style Tabs in Vivaldi.`,
-            `Your task is to analyze ALL provided tabs and group them comprehensively into clean, concise thematic folders in a single pass.`,
-            `Do not stop after creating only one folder—find all distinct groups of 2+ related tabs across the entire tab set.`,
-            ``,
-            `CRITICAL FOLDER NAME RULES:`,
-            `- Folder names MUST be extremely brief: strictly 1 to 3 words (maximum 30 characters).`,
-            `- Folder names MUST start with one relevant emoji followed by a concise category name in ${langInstruction} (e.g. "🤖 Штучний інтелект", "🛒 Покупки", "💻 Розробка", "📰 Новини").`,
-            `- NEVER include random numbers, sequences, metadata, or run-on words in folder names.`,
-            ``,
-            `SEARCH ENGINE QUERIES (Google, Bing, DuckDuckGo, etc.):`,
-            `- NEVER create a generic "Пошук" / "Search" / "Google" folder!`,
-            `- Group search queries strictly by their ACTUAL SPECIFIC TOPIC or subject matter (e.g. searching for programming solutions belongs with development tabs; searching for product prices belongs with shopping tabs).`,
-            `- If multiple search queries share the same specific topic, group them under that topic (e.g. "🐧 Linux", "🛒 Покупки"), NEVER under "🔍 Пошук".`,
-            `- If a search query is isolated and has no topic overlap with other tabs, leave it ungrouped.`,
-          ].join('\n'),
-        },
-      ],
-    },
-    contents: [
-      {
-        role: 'user',
-        parts: [
-          {
-            text: [
-              `Group the provided browser tabs into logical, coherent thematic categories.`,
-              ``,
-              `IMPORTANT RULES:`,
-              `1. Existing Folders: Check the existing folders first: ${JSON.stringify(existingFolders)}. If any tabs fit into an existing folder, return its "folderId" and add the tab IDs to it.`,
-              `2. Exhaustive Multi-group Coverage: Analyze the full list of tabs and return ALL relevant thematic groups in one response. Do NOT stop after just 1 or 2 groups. Group as many tabs as possible into their respective 2+ tab themes.`,
-              `3. New Folders: Create a new folder whenever 2 or more tabs share a theme. Isolated tabs that have no topic overlap with other tabs or existing folders must remain ungrouped.`,
-              `4. Search Engine Queries: Do NOT create a generic "Search" or "Google" folder! Look at "searchTopic" or the search terms in the tab title and categorize it by the subject matter being searched (e.g. search for shoes -> 🛒 Shopping; search for Linux drivers -> 🐧 Linux/Tech). Never group unrelated search queries together just because they are on google.com.`,
-              `5. Naming: Name all new folders in ${langInstruction}. Each new folder name must be short (1-3 words) and begin with an appropriate emoji.`,
-              `6. Colors: Assign a suitable color for new folders from this list: ${JSON.stringify(FOLDER_COLORS)}.`,
-              ``,
-              `Tabs to group:`,
-              JSON.stringify(safeTabs, null, 2),
-            ].join('\n'),
-          },
-        ],
-      },
-    ],
-    generationConfig: {
-      temperature: 0.4,
-      maxOutputTokens: 8192,
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: 'OBJECT',
-        properties: {
-          groups: {
-            type: 'ARRAY',
-            description: 'Exhaustive array of all thematic folder groups organizing the tabs',
-            items: {
-              type: 'OBJECT',
-              properties: {
-                folderId: {
-                  type: 'INTEGER',
-                  description: 'ID of an existing folder if placing tabs into it',
-                },
-                newFolderName: {
-                  type: 'STRING',
-                  description: 'Short folder name (1-3 words, max 30 chars) starting with an emoji',
-                },
-                color: {
-                  type: 'STRING',
-                  description: 'Color of the new folder from the allowed palette',
-                },
-                tabIds: {
-                  type: 'ARRAY',
-                  items: { type: 'INTEGER' },
-                  description: 'IDs of the tabs belonging to this group',
-                },
-              },
-              required: ['tabIds'],
-            },
-          },
-        },
-        required: ['groups'],
-      },
-    },
-  }
-
-  const targetModel = model || 'gemini-2.5-flash'
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(targetModel)}:generateContent?key=${encodeURIComponent(apiKey.trim())}`
-
-  const response = await fetchFn(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(promptPayload),
-  })
-
-  if (!response.ok) {
-    const errorBody = await response.text().catch(() => '')
-    throw new Error(`Gemini API error (${response.status}): ${errorBody || response.statusText}`)
-  }
-
-  const data = await response.json()
-  const candidateText = data?.candidates?.[0]?.content?.parts?.[0]?.text
-  if (!candidateText) {
-    return { groups: [] }
-  }
-
-  try {
-    const parsed = JSON.parse(candidateText)
-    const rawGroups = Array.isArray(parsed.groups) ? parsed.groups : []
-    const groups = rawGroups
-      .map(g => {
-        const cleanedName = sanitizeFolderName(g.newFolderName)
-        return {
-          folderId: Number.isFinite(Number(g.folderId)) ? Number(g.folderId) : undefined,
-          newFolderName: cleanedName || undefined,
-          color: FOLDER_COLORS.includes(g.color) ? g.color : 'blue',
-          tabIds: Array.isArray(g.tabIds) ? g.tabIds.map(Number).filter(Number.isFinite) : [],
-        }
-      })
-      .filter(g => (g.folderId != null || g.newFolderName) && g.tabIds.length > 0)
-
-    return { groups }
-  } catch (parseError) {
-    console.error('[svb-gemini] failed to parse Gemini JSON output', parseError, candidateText)
-    throw new Error('Failed to parse AI grouping response')
-  }
-}
-
-module.exports = {
-  FALLBACK_MODELS,
-  FOLDER_COLORS,
-  LANGUAGE_LABELS,
-  sanitizeTabForPrompt,
-  sanitizeFolderName,
-  fetchAvailableModels,
-  groupTabsWithGemini,
-}
-
-    },
     "store/tab-store.js": function(require, module, exports) {
 const { settingsStore } = require('../store/settings-store.js')
 const { createTreeController } = require('../controllers/tree-controller.js')
 const { createNativeReconcile } = require('../controllers/native-reconcile.js')
 const { generateFolderPageUrl } = require('../ui/folder-page.js')
-const { groupTabsWithGemini } = require('../services/gemini-api.js')
 
 const TREE_NAMESPACE_KEY = 'svbTree'
 
@@ -6953,117 +6438,6 @@ function createTabStore(api) {
           ...vivExtData
         }
       })
-    },
-
-    async aiGroupTabs(options = {}) {
-      const apiKey = settingsStore.get('geminiApiKey')
-      if (!apiKey || typeof apiKey !== 'string' || !apiKey.trim()) {
-        return { success: false, reason: 'missing-key' }
-      }
-
-      if (state.windowId == null) {
-        return { success: false, reason: 'no-window' }
-      }
-
-      const existingFolders = []
-      const candidateTabs = []
-      const tabById = new Map(state.tabs.map(t => [t.id, t]))
-
-      for (const item of state.treeTabs) {
-        const tab = tabById.get(item.id) || item.tab
-        if (!tab || tab.pinned) continue
-
-        const isFolder = !!(tab.vivExtData && tab.vivExtData.isFolder) || (typeof tab.url === 'string' && tab.url.includes('svb-folder.html'))
-        if (isFolder) {
-          const title = (tab.vivExtData && tab.vivExtData.fixedTitle) || tab.title || 'Folder'
-          existingFolders.push({ id: item.id, title })
-        } else if (item.depth === 0) {
-          candidateTabs.push(tab)
-        }
-      }
-
-      if (candidateTabs.length < 2) {
-        return { success: false, reason: 'not-enough-tabs', count: candidateTabs.length }
-      }
-
-      const model = settingsStore.get('geminiModel') || 'gemini-2.5-flash'
-      const language = settingsStore.get('geminiFolderLanguage') || 'uk'
-      const fetchFn = options.fetchFn || globalThis.fetch
-
-      let result
-      try {
-        result = await groupTabsWithGemini({
-          apiKey,
-          model,
-          language,
-          ungroupedTabs: candidateTabs,
-          existingFolders,
-          fetchFn,
-        })
-      } catch (error) {
-        console.error('[svb-ai] gemini grouping failed', error)
-        return { success: false, reason: 'api-error', error: error.message }
-      }
-
-      const groups = Array.isArray(result?.groups) ? result.groups : []
-      if (groups.length === 0) {
-        return { success: true, count: 0, foldersCount: 0 }
-      }
-
-      const candidateIdSet = new Set(candidateTabs.map(t => t.id))
-      let movedCount = 0
-      let foldersCount = 0
-
-      for (const group of groups) {
-        const targetTabIds = (group.tabIds || []).filter(id => candidateIdSet.has(id))
-        if (targetTabIds.length === 0) continue
-
-        if (group.folderId != null) {
-          const existingFolder = existingFolders.find(f => f.id === group.folderId)
-          if (existingFolder) {
-            await treeController.moveTabs(targetTabIds, existingFolder.id, 'inside', state.tabs)
-            for (const id of targetTabIds) candidateIdSet.delete(id)
-            movedCount += targetTabIds.length
-            foldersCount++
-          }
-        } else if (group.newFolderName && targetTabIds.length >= 2) {
-          const folderName = group.newFolderName
-          const folderColor = group.color || 'blue'
-          const folderBase = typeof location !== 'undefined' ? location.href : 'http://localhost/'
-          const folderUrl = new URL('svb-folder.html', folderBase).href + '#svb-folder:color=' + folderColor
-
-          const vivExtData = {
-            ...getCreateVivExtDataForState(state),
-            isFolder: true,
-            folderColor,
-            fixedTitle: folderName,
-          }
-
-          let newFolderTab = null
-          if (api.createRestoredTab) {
-            newFolderTab = await api.createRestoredTab(state.windowId, {
-              url: folderUrl,
-              active: false,
-              vivExtData,
-            })
-          }
-
-          if (newFolderTab && Number.isFinite(newFolderTab.id)) {
-            await syncTabs({ preserveContext: true }, 'create-folder')
-            await treeController.moveTabs(targetTabIds, newFolderTab.id, 'inside', state.tabs)
-            for (const id of targetTabIds) candidateIdSet.delete(id)
-            movedCount += targetTabIds.length
-            foldersCount++
-          }
-        }
-      }
-
-      if (movedCount > 0) {
-        pendingNativeReconcileReason = 'ai-group-tabs'
-        await syncTabs({ preserveContext: true }, 'ai-group-tabs')
-      }
-
-      return { success: true, count: movedCount, foldersCount }
     },
 
     createChildTab(parentTabId) {
@@ -10767,7 +10141,6 @@ module.exports = { syncWorkspaceStrip }
 const { settingsStore } = require('../store/settings-store.js')
 const { syncPinnedGrid } = require('./pinned-grid.js')
 const { syncWorkspaceStrip } = require('./workspace-strip.js')
-const { fetchAvailableModels } = require('../services/gemini-api.js')
 
 function getTabHoverTitle(tab, isActive) {
   let title = tab.title || ''
@@ -11524,23 +10897,6 @@ function renderCollapseAllIcon() {
   `
 }
 
-function renderSparklesIcon() {
-  return `
-    <svg class="svb-sparkles-icon" viewBox="0 0 16 16" aria-hidden="true">
-      <path fill="currentColor" d="M8 1.5l1.2 3.3 3.3 1.2-3.3 1.2L8 10.5l-1.2-3.3-3.3-1.2 3.3-1.2L8 1.5zm4.5 7.5l.6 1.65 1.65.6-1.65.6-.6 1.65-.6-1.65-1.65-.6 1.65-.6.6-1.65zM3.5 9l.6 1.65 1.65.6-1.65.6-.6 1.65-.6-1.65-1.65-.6 1.65-.6.6-1.65z"/>
-    </svg>
-  `
-}
-
-function renderAiSpinnerIcon() {
-  return `
-    <svg class="svb-ai-spinner-icon" viewBox="0 0 16 16" aria-hidden="true">
-      <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.25" />
-      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8 2a6 6 0 0 1 6 6" />
-    </svg>
-  `
-}
-
 function createNodeFromHtml(html) {
   const template = document.createElement('template')
   template.innerHTML = html.trim()
@@ -11565,7 +10921,6 @@ function createSidebarRenderer(options) {
     onToggleMute,
     onToggleCollapse,
     onCollapseAll,
-    onAiGroupTabs,
     onSelectTab,
     onOpenContextMenu,
     onContextMenuAction,
@@ -11587,7 +10942,6 @@ function createSidebarRenderer(options) {
   let previousPanelPinned = null
   let previousIsSettingsOpen = false
   let previousCreatingWorkspace = false
-  let previousIsAiGroupingInProgress = false
   let previousNewTabPlacement = null
   let previousSelectedIds = []
   let previousDraggedIds = []
@@ -11615,7 +10969,6 @@ function createSidebarRenderer(options) {
   let creatingWorkspace = false
   let renamingWorkspaceId = null
   let pendingMoveToWorkspaceTarget = null
-  let isAiGroupingInProgress = false
   const eventController = new AbortController()
   const eventOptions = { signal: eventController.signal }
   const tabsById = new Map()
@@ -11671,57 +11024,6 @@ function createSidebarRenderer(options) {
     renderCurrent()
   }
 
-  let activeToastTimer = null
-
-  function showToast(message, type = 'info', duration = 3500) {
-    if (!shell || !shell.toastHost) return
-    const host = shell.toastHost
-
-    if (activeToastTimer) {
-      clearTimeout(activeToastTimer)
-      activeToastTimer = null
-    }
-
-    host.innerHTML = ''
-
-    const toast = document.createElement('div')
-    toast.className = `svb-toast svb-toast--${type}`
-
-    const msgSpan = document.createElement('span')
-    msgSpan.className = 'svb-toast__message'
-    msgSpan.textContent = message
-    toast.appendChild(msgSpan)
-
-    const closeBtn = document.createElement('button')
-    closeBtn.className = 'svb-toast__close'
-    closeBtn.type = 'button'
-    closeBtn.setAttribute('aria-label', 'Close')
-    closeBtn.innerHTML = '&times;'
-    closeBtn.addEventListener('click', (e) => {
-      e.stopPropagation()
-      dismissToast(toast)
-    })
-    toast.appendChild(closeBtn)
-
-    host.appendChild(toast)
-
-    if (duration > 0) {
-      activeToastTimer = setTimeout(() => {
-        dismissToast(toast)
-      }, duration)
-    }
-  }
-
-  function dismissToast(toast) {
-    if (!toast || !toast.parentNode) return
-    toast.classList.add('is-hiding')
-    setTimeout(() => {
-      if (toast && toast.parentNode) {
-        toast.parentNode.removeChild(toast)
-      }
-    }, 200)
-  }
-
   function startEditing(tabId) {
     if (!Number.isFinite(tabId)) return
     const tab = findTab(tabId)
@@ -11742,12 +11044,10 @@ function createSidebarRenderer(options) {
             <div class="svb-header__count">0</div>
           </div>
           <div class="svb-header__actions">
-            <button class="svb-icon-button" data-role="ai-group-tabs" title="AI: Group tabs into folders" aria-label="AI: Group tabs into folders"></button>
             <button class="svb-icon-button" data-role="collapse-all" title="Collapse all trees" aria-label="Collapse all trees"></button>
             <button class="svb-icon-button" data-role="toggle-pinned" title="Pin panel"></button>
           </div>
         </div>
-        <div class="svb-toast-host" aria-live="polite"></div>
 
         <div class="svb-main-view">
           <div class="svb-workspaces" style="display:none"></div>
@@ -11877,46 +11177,6 @@ function createSidebarRenderer(options) {
               </select>
             </div>
 
-            <div class="svb-settings-section-divider"></div>
-            <div class="svb-settings-title-sub">AI Tab Grouping (Gemini)</div>
-
-            <div class="svb-settings-group">
-              <div class="svb-settings-label-row">
-                <label class="svb-settings-label" for="svb-gemini-key">Gemini API Key</label>
-                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="svb-settings-link">Get Free Key</a>
-              </div>
-              <input type="password" id="svb-gemini-key" name="geminiApiKey" class="svb-settings-input" placeholder="AIzaSy..." autocomplete="off" spellcheck="false">
-              <div class="svb-settings-key-actions">
-                <button type="button" class="svb-settings-button-small" data-role="toggle-key-visibility" title="Show / Hide key">👁 Show key</button>
-              </div>
-            </div>
-
-            <div class="svb-settings-group">
-              <div class="svb-settings-label-row">
-                <label class="svb-settings-label">Model</label>
-                <button type="button" class="svb-settings-link-btn" data-role="refresh-gemini-models" title="Fetch models from API">↻ Refresh</button>
-              </div>
-              <select name="geminiModel" class="svb-settings-select">
-                <option value="gemini-2.5-flash">gemini-2.5-flash (Recommended)</option>
-                <option value="gemini-2.0-flash">gemini-2.0-flash</option>
-                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-                <option value="gemini-1.5-flash-8b">gemini-1.5-flash-8b</option>
-                <option value="gemini-2.5-pro">gemini-2.5-pro</option>
-              </select>
-            </div>
-
-            <div class="svb-settings-group">
-              <label class="svb-settings-label">Folder Naming Language</label>
-              <select name="geminiFolderLanguage" class="svb-settings-select">
-                <option value="uk">Українська</option>
-                <option value="en">English</option>
-                <option value="de">Deutsch</option>
-                <option value="pl">Polski</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="auto">Auto (Match content)</option>
-              </select>
-            </div>
           </div>
         </div>
       </div>
@@ -11930,12 +11190,10 @@ function createSidebarRenderer(options) {
       mainView: root.querySelector('.svb-main-view'),
       workspaceBar: root.querySelector('.svb-workspaces'),
       settingsView: root.querySelector('.svb-settings-view'),
-      toastHost: root.querySelector('.svb-toast-host'),
       count: root.querySelector('.svb-header__count'),
       settingsButton: root.querySelector('[data-role="toggle-settings"]'),
       collapseAllButton: root.querySelector('[data-role="collapse-all"]'),
       pinButton: root.querySelector('[data-role="toggle-pinned"]'),
-      aiGroupButton: root.querySelector('[data-role="ai-group-tabs"]'),
       pinnedSection: root.querySelector('.svb-section--pinned'),
       pinnedGrid: root.querySelector('.svb-pinned-grid'),
       tabList: root.querySelector('.svb-tab-list'),
@@ -12181,19 +11439,6 @@ function createSidebarRenderer(options) {
     currentShell.collapseAllButton.className = `svb-icon-button${canCollapseAll ? '' : ' is-disabled'}`
     currentShell.collapseAllButton.disabled = !canCollapseAll
     currentShell.collapseAllButton.innerHTML = renderCollapseAllIcon()
-    if (currentShell.aiGroupButton) {
-      if (isAiGroupingInProgress) {
-        currentShell.aiGroupButton.className = 'svb-icon-button is-loading'
-        currentShell.aiGroupButton.disabled = true
-        currentShell.aiGroupButton.innerHTML = renderAiSpinnerIcon()
-        currentShell.aiGroupButton.title = 'AI is grouping tabs...'
-      } else {
-        currentShell.aiGroupButton.className = 'svb-icon-button'
-        currentShell.aiGroupButton.disabled = false
-        currentShell.aiGroupButton.innerHTML = renderSparklesIcon()
-        currentShell.aiGroupButton.title = 'AI: Group tabs into folders (Gemini)'
-      }
-    }
     currentShell.pinButton.className = `svb-icon-button${state.panelPinned ? ' is-active' : ''}`
     currentShell.pinButton.title = state.panelPinned ? 'Unpin panel' : 'Pin panel'
     currentShell.pinButton.innerHTML = renderPinIcon(state.panelPinned)
@@ -12331,7 +11576,6 @@ function createSidebarRenderer(options) {
       previousPanelPinned !== state.panelPinned
       || previousIsSettingsOpen !== isSettingsOpen
       || previousCreatingWorkspace !== creatingWorkspace
-      || previousIsAiGroupingInProgress !== isAiGroupingInProgress
     ) {
       updateShellControls(currentShell, state, treeTabs)
     } else {
@@ -12980,120 +12224,6 @@ function createSidebarRenderer(options) {
         ? latestState.activeTabId
         : null
       onCreateChildTab(tabId)
-      return
-    }
-    if (role === 'ai-group-tabs') {
-      event.preventDefault()
-      event.stopPropagation()
-      const apiKey = settingsStore.get('geminiApiKey')
-      if (!apiKey || !apiKey.trim()) {
-        showToast('⚠️ Please enter a Gemini API Key in Settings.', 'warning', 4000)
-        isSettingsOpen = true
-        renderCurrent()
-        setTimeout(() => {
-          const input = root.querySelector('.svb-settings-view input[name="geminiApiKey"]')
-          if (input) {
-            input.focus()
-            input.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          }
-        }, 50)
-        return
-      }
-
-      if (isAiGroupingInProgress) return
-      isAiGroupingInProgress = true
-
-      try {
-        updateShellControls(shell, latestState, latestTreeTabs)
-      } catch (err) {
-        console.warn('[svb-ui] Failed to update shell controls before AI grouping', err)
-      }
-
-      Promise.resolve()
-        .then(async () => {
-          if (!onAiGroupTabs) return
-          const res = await onAiGroupTabs()
-          if (!res) return
-
-          if (res.success) {
-            if (res.count > 0) {
-              const fCount = res.foldersCount || 1
-              showToast(
-                `✨ Organized ${res.count} tab${res.count === 1 ? '' : 's'} into ${fCount} folder${fCount === 1 ? '' : 's'}!`,
-                'success',
-                4000
-              )
-            } else {
-              showToast('✨ All tabs are already organized in folders.', 'info', 3500)
-            }
-          } else {
-            if (res.reason === 'missing-key') {
-              showToast('⚠️ Please enter a Gemini API Key in Settings.', 'warning', 4000)
-              isSettingsOpen = true
-            } else if (res.reason === 'not-enough-tabs') {
-              showToast('⚠️ At least 2 tabs are required for AI grouping.', 'warning', 3500)
-            } else if (res.reason === 'api-error') {
-              showToast(`❌ AI grouping failed: ${res.error || 'API error'}`, 'error', 5000)
-            } else {
-              showToast('❌ Failed to group tabs.', 'error', 4000)
-            }
-          }
-        })
-        .catch(err => {
-          console.error('[svb-ui] AI grouping error', err)
-          showToast(`❌ Error: ${err.message || 'Something went wrong'}`, 'error', 5000)
-        })
-        .finally(() => {
-          isAiGroupingInProgress = false
-          if (shell) {
-            try {
-              updateShellControls(shell, latestState, latestTreeTabs)
-            } catch (_e) {
-              void _e
-            }
-          }
-          renderCurrent()
-        })
-      return
-    }
-    if (role === 'toggle-key-visibility') {
-      event.preventDefault()
-      event.stopPropagation()
-      const keyInput = shell && shell.settingsView ? shell.settingsView.querySelector('input[name="geminiApiKey"]') : null
-      const btn = event.target.closest('[data-role="toggle-key-visibility"]')
-      if (keyInput) {
-        const isPassword = keyInput.type === 'password'
-        keyInput.type = isPassword ? 'text' : 'password'
-        if (btn) {
-          btn.textContent = isPassword ? '🙈 Hide key' : '👁 Show key'
-        }
-      }
-      return
-    }
-    if (role === 'refresh-gemini-models') {
-      event.preventDefault()
-      event.stopPropagation()
-      const apiKey = settingsStore.get('geminiApiKey')
-      if (!apiKey || !apiKey.trim()) return
-      const btn = event.target.closest('[data-role="refresh-gemini-models"]')
-      if (btn) btn.textContent = '⏳ Loading...'
-      fetchAvailableModels(apiKey)
-        .then(models => {
-          const select = shell && shell.settingsView ? shell.settingsView.querySelector('select[name="geminiModel"]') : null
-          if (select && models.length > 0) {
-            const currentVal = settingsStore.get('geminiModel')
-            select.innerHTML = models.map(m => `<option value="${m}">${m}${m === 'gemini-2.5-flash' ? ' (Recommended)' : ''}</option>`).join('')
-            if (models.includes(currentVal)) {
-              select.value = currentVal
-            } else {
-              select.value = models[0]
-              settingsStore.set('geminiModel', models[0])
-            }
-          }
-        })
-        .finally(() => {
-          if (btn) btn.textContent = '↻ Refresh'
-        })
       return
     }
     if (role === 'collapse-all') {
@@ -13772,7 +12902,6 @@ function createSidebarRenderer(options) {
       previousPanelPinned = state.panelPinned
       previousIsSettingsOpen = isSettingsOpen
       previousCreatingWorkspace = creatingWorkspace
-      previousIsAiGroupingInProgress = isAiGroupingInProgress
       previousNewTabPlacement = currentNewTabPlacement
       previousSelectedIds = visualState.selectedIds.slice()
       previousDraggedIds = visualState.draggedIds.slice()
@@ -13788,10 +12917,6 @@ function createSidebarRenderer(options) {
     },
 
     dispose() {
-      if (activeToastTimer) {
-        clearTimeout(activeToastTimer)
-        activeToastTimer = null
-      }
       if (pinnedGridObserver) pinnedGridObserver.disconnect()
       if (workspaceBarObserver) workspaceBarObserver.disconnect()
       eventController.abort()
@@ -14044,7 +13169,6 @@ async function main() {
     },
     onToggleCollapse: id => { void store.toggleCollapsed(id) },
     onCollapseAll: () => { void store.collapseAll() },
-    onAiGroupTabs: () => store.aiGroupTabs(),
     onOpenContextMenu: id => {
       const selectedIds = latestSelectionState.selectedIds || []
       if (!selectedIds.includes(id)) {
