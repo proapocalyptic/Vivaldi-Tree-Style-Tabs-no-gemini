@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Vivaldi Patcher for Arch Linux
+# Vivaldi Patcher for Linux
 # Path to window.html in Vivaldi resources
 WINDOW_HTML="/opt/vivaldi/resources/vivaldi/window.html"
 CUSTOM_JS_DEST="/opt/vivaldi/resources/vivaldi/custom.js"

@@ -69,9 +69,9 @@ To cleanly remove the mod from Vivaldi:
   uninstall-windows.bat "D:\CustomPath\Vivaldi\Application"
   ```
 
-### Linux (Arch-based)
+### Linux
 
-The project includes an automatic installer that sets up a Pacman Hook to keep the mod active after system updates.
+The project includes an installer that copies the mod to your home directory and patches Vivaldi.
 
 1. **Build the project** (or download the pre-built files):
    ```bash
@@ -84,9 +84,11 @@ The project includes an automatic installer that sets up a Pacman Hook to keep t
    *What it does:*
    - Copies `custom.js` to `~/.local/share/vivaldi-patch/`.
    - Creates a patching script that injects the mod into Vivaldi's `window.html`.
-   - Sets up a **Pacman Hook** (`/etc/pacman.d/hooks/vivaldi-patch.hook`) that automatically re-applies the patch every time Vivaldi is updated via the package manager.
+   - Applies the patch immediately (via `sudo`).
 
-If you don't want the hook and just want a one-time patch, you can use:
+Vivaldi updates overwrite `window.html`, so after an update re-apply the patch with `sudo ~/.local/share/vivaldi-patch/patch.sh`.
+
+To patch straight from the repository without installing anything to your home directory, you can use:
 ```bash
 sudo bash patch-linux.sh
 ```

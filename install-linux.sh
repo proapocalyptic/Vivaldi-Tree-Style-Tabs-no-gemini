@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Vivaldi Auto-Patch Installer for Arch Linux
+# Vivaldi Auto-Patch Installer for Linux
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$SCRIPT_DIR" || exit 1
 
 INSTALL_DIR="$HOME/.local/share/vivaldi-patch"
-HOOK_DIR="/etc/pacman.d/hooks"
-HOOK_FILE="vivaldi-patch.hook"
 
 echo "--- Встановлення автоматичного патчера Vivaldi ---"
 
@@ -64,39 +62,15 @@ EOF
 chmod +x "$INSTALL_DIR/patch.sh"
 echo "Скрипт патчування створено/оновлено: $INSTALL_DIR/patch.sh"
 
-# 3. Створення та встановлення хука
-echo "Налаштування Pacman Hook..."
-
-cat << EOF > "$HOOK_FILE"
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = vivaldi
-
-[Action]
-Description = Автоматичне патчування Vivaldi (Tree Style Tabs)...
-When = PostTransaction
-Exec = /usr/bin/bash "$INSTALL_DIR/patch.sh"
-EOF
-
-# Встановлюємо хук та ОДРАЗУ застосовуємо патч
+# 3. Негайне застосування патча (потрібні права root для запису в /opt/vivaldi)
 if [ "$EUID" -ne 0 ]; then
-    echo "Запитую права sudo для встановлення хука та негайного застосування змін..."
-    sudo mkdir -p "$HOOK_DIR"
-    sudo cp "$HOOK_FILE" "$HOOK_DIR/"
-    rm "$HOOK_FILE"
-    # Запускаємо патч негайно
+    echo "Запитую права sudo для застосування змін..."
     sudo "$INSTALL_DIR/patch.sh"
 else
-    mkdir -p "$HOOK_DIR"
-    cp "$HOOK_FILE" "$HOOK_DIR/"
-    rm "$HOOK_FILE"
-    # Запускаємо патч негайно
     "$INSTALL_DIR/patch.sh"
 fi
 
 echo "--- Встановлення завершено успішно! ---"
 echo "1. Новий код збережено у вашій домівці."
 echo "2. Зміни вже застосовані до поточної версії Vivaldi."
-echo "3. Pacman Hook активний — оновлення браузера більше не страшні."
+echo "3. Після оновлення Vivaldi запустіть: sudo $INSTALL_DIR/patch.sh"
