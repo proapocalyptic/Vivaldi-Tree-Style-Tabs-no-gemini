@@ -21,7 +21,7 @@ type GitHubAsset struct {
 	BrowserDownloadUrl string `json:"browser_download_url"`
 }
 
-const RepoUrl = "https://api.github.com/repos/R0STEFAN/Vivaldi-Tree-Style-Tabs/releases/latest"
+const RepoUrl = "https://api.github.com/repos/proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini/releases/latest"
 
 // CheckForUpdates returns the latest tag, download URL, release notes, and error
 func CheckForUpdates(currentVersion string) (string, string, string, error) {

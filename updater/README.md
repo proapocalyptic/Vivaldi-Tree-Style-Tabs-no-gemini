@@ -4,7 +4,7 @@ This is a background client written in Go that automatically tracks updates for 
 
 ## Features
 - **Real-time Vivaldi intercept:** Uses `fsnotify` to listen for Vivaldi updates. Patches the browser automatically before you even restart it!
-- **Mod Updates:** Periodically checks GitHub releases for new versions of the mod, downloads `mod.zip`, and automatically installs it.
+- **Mod Updates:** Periodically checks this fork's GitHub releases (`proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini`, set in `github.go`) for new versions of the mod, downloads `mod.zip`, and automatically installs it.
 - **System Tray:** A neat little system tray icon to manually force an update check or patch Vivaldi.
 
 ## Building (If you have Go installed)

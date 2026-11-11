@@ -28,7 +28,7 @@ Upstream's Linux installer set up a pacman hook. This fork replaces it with an A
 
 ### Not changed, but worth knowing
 
-- The Windows auto-updater (`updater/`) and its release workflow still point at the **upstream** repository. If you use `svb-updater.exe`, it will download upstream releases, **including the Gemini feature**. Windows users of this fork should use `patch-windows.bat` with a locally built `dist/custom.js` instead.
+- The Windows auto-updater (`updater/`) now checks **this fork's** GitHub releases (`proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini`) instead of upstream's. It only finds an update once a release exists on this repository: the `Release Build` workflow builds `mod.zip` and `svb-updater.exe` when a `v*` tag is pushed. Until then it reports an error rather than falling back to upstream. It is untested here, as there is no Windows machine or Go toolchain involved in this fork's development.
 - The macOS and Windows scripts are inherited from upstream and are untested here.
 
 ## What It Does (inherited from upstream)
@@ -66,13 +66,13 @@ dist/custom.js
 
 ### Windows
 
-> **Fork note:** `svb-updater.exe` fetches upstream releases (which include Gemini). Prefer the manual patcher below with a locally built `dist/custom.js`.
+> **Fork note:** `svb-updater.exe` follows this fork's releases, which only exist once a `v*` tag has been pushed here. Until then, use the manual patcher below with a locally built `dist/custom.js`.
 
-Upstream's recommended way to install and maintain the mod on Windows is the native **Auto-Updater** (`svb-updater.exe`). It sits quietly in your system tray, detects when Vivaldi updates, and automatically re-applies the mod for you. It also notifies you of new mod updates from GitHub!
+The recommended way to install and maintain the mod on Windows is the native **Auto-Updater** (`svb-updater.exe`). It sits quietly in your system tray, detects when Vivaldi updates, and automatically re-applies the mod for you. It also notifies you of new mod updates from GitHub!
 
-**Upstream auto-updater (not recommended for this fork):**
+**Auto-updater:**
 
-1. Download the `svb-updater.exe` file from the upstream [Releases](https://github.com/R0STEFAN/Vivaldi-Tree-Style-Tabs/releases) page.
+1. Download the `svb-updater.exe` file from this fork's [Releases](https://github.com/proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini/releases) page.
 2. Place the file in a permanent folder where you want to keep it (e.g., `Documents\VivaldiTreeTabs`).
 3. Run `svb-updater.exe`. It will automatically download the required mod files from GitHub, find your Vivaldi installation, and apply the mod.
 4. *(Optional)* Right-click the tray icon and enable "Run on Startup" to ensure Vivaldi is always patched automatically.
