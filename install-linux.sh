@@ -5,6 +5,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$SCRIPT_DIR" || exit 1
 
 INSTALL_DIR="$HOME/.local/share/vivaldi-patch"
+APT_HOOK_FILE="/etc/apt/apt.conf.d/99vivaldi-patch"
 
 echo "--- Встановлення автоматичного патчера Vivaldi ---"
 
@@ -14,16 +15,17 @@ echo "Створено директорію: $INSTALL_DIR"
 
 # 2. Копіювання файлів
 if [ -f "dist/custom.js" ]; then
-    cp "dist/custom.js" "$INSTALL_DIR/"
-    echo "Актуальний custom.js скопійовано у $INSTALL_DIR"
+    # Символічне посилання: після `npm run build` оновлений файл підхоплюється автоматично
+    ln -sf "$SCRIPT_DIR/dist/custom.js" "$INSTALL_DIR/custom.js"
+    echo "custom.js підключено символічним посиланням у $INSTALL_DIR"
 else
     echo "Помилка: dist/custom.js не знайдено! Спочатку запустіть 'npm run build'."
     exit 1
 fi
 
 if [ -f "dist/svb-folder.html" ]; then
-    cp "dist/svb-folder.html" "$INSTALL_DIR/"
-    echo "Актуальний svb-folder.html скопійовано у $INSTALL_DIR"
+    ln -sf "$SCRIPT_DIR/dist/svb-folder.html" "$INSTALL_DIR/svb-folder.html"
+    echo "svb-folder.html підключено символічним посиланням у $INSTALL_DIR"
 fi
 
 # Створюємо автономний скрипт патчування в папці встановлення
@@ -62,15 +64,23 @@ EOF
 chmod +x "$INSTALL_DIR/patch.sh"
 echo "Скрипт патчування створено/оновлено: $INSTALL_DIR/patch.sh"
 
-# 3. Негайне застосування патча (потрібні права root для запису в /opt/vivaldi)
+# 3. APT-хук: повторно застосовує патч після кожної транзакції apt/dpkg
+# (патч ідемпотентний, тож зайві запуски нічого не змінюють; "|| true" не дає
+# помилці патча зламати apt). Шлях абсолютний, бо хук виконується від root.
+HOOK_CONTENT="DPkg::Post-Invoke { \"if [ -x '$INSTALL_DIR/patch.sh' ]; then '$INSTALL_DIR/patch.sh' || true; fi\"; };"
+
+# 4. Встановлення хука та негайне застосування патча (потрібні права root)
 if [ "$EUID" -ne 0 ]; then
-    echo "Запитую права sudo для застосування змін..."
+    echo "Запитую права sudo для встановлення APT-хука та застосування змін..."
+    echo "$HOOK_CONTENT" | sudo tee "$APT_HOOK_FILE" > /dev/null
     sudo "$INSTALL_DIR/patch.sh"
 else
+    echo "$HOOK_CONTENT" > "$APT_HOOK_FILE"
     "$INSTALL_DIR/patch.sh"
 fi
 
 echo "--- Встановлення завершено успішно! ---"
 echo "1. Новий код збережено у вашій домівці."
 echo "2. Зміни вже застосовані до поточної версії Vivaldi."
-echo "3. Після оновлення Vivaldi запустіть: sudo $INSTALL_DIR/patch.sh"
+echo "3. APT-хук ($APT_HOOK_FILE) повторно патчить Vivaldi після оновлень."
+echo "4. Після нової збірки (npm run build) перевстановлення не потрібне — файли підключені посиланнями."

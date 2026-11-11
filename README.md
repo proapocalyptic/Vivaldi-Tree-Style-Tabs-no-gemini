@@ -69,9 +69,9 @@ To cleanly remove the mod from Vivaldi:
   uninstall-windows.bat "D:\CustomPath\Vivaldi\Application"
   ```
 
-### Linux
+### Linux (Debian/Ubuntu-based)
 
-The project includes an installer that copies the mod to your home directory and patches Vivaldi.
+The project includes an installer that links the mod into your home directory, patches Vivaldi, and sets up an APT hook to keep it patched across updates.
 
 1. **Build the project** (or download the pre-built files):
    ```bash
@@ -82,11 +82,12 @@ The project includes an installer that copies the mod to your home directory and
    bash install-linux.sh
    ```
    *What it does:*
-   - Copies `custom.js` to `~/.local/share/vivaldi-patch/`.
+   - Symlinks `custom.js` and `svb-folder.html` from `dist/` into `~/.local/share/vivaldi-patch/`, so a later `npm run build` is picked up without reinstalling.
    - Creates a patching script that injects the mod into Vivaldi's `window.html`.
-   - Applies the patch immediately (via `sudo`).
+   - Installs an **APT hook** (`/etc/apt/apt.conf.d/99vivaldi-patch`, via `sudo`) that re-applies the patch after every apt/dpkg run. The patch is idempotent, so it only changes files when Vivaldi has overwritten them.
+   - Applies the patch immediately.
 
-Vivaldi updates overwrite `window.html`, so after an update re-apply the patch with `sudo ~/.local/share/vivaldi-patch/patch.sh`.
+Because the hook runs as root and executes a script from your home directory, only install it on a machine where you trust everything that can write to that directory. To remove it, delete `/etc/apt/apt.conf.d/99vivaldi-patch`. Without the hook, re-apply manually after Vivaldi updates with `sudo ~/.local/share/vivaldi-patch/patch.sh`.
 
 To patch straight from the repository without installing anything to your home directory, you can use:
 ```bash
