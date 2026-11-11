@@ -1,19 +1,37 @@
-# TreeTabsVivaldi
+# TreeTabsVivaldi (no-Gemini fork)
 
 ![Vivaldi Tree Style Tabs Screenshot](screenshot/vivaldi_aIzu7wJKEg.jpg)
 
-TreeTabsVivaldi is a custom Vivaldi browser UI mod that adds a Sidebery-inspired vertical tree tab panel to the left side of the browser window.
+A fork of [R0STEFAN/Vivaldi-Tree-Style-Tabs](https://github.com/R0STEFAN/Vivaldi-Tree-Style-Tabs), a Sidebery-inspired vertical tree tab panel for Vivaldi. It is not a browser extension: it is a `custom.js` UI modification loaded into Vivaldi's `window.html`.
 
-It is not a browser extension. It is a `custom.js` UI modification loaded into Vivaldi's `window.html`.
+This fork tracks upstream **v2.3.8** and differs in two ways: the Gemini AI integration is removed, and the Linux install targets Debian-based systems.
 
-## 🔥 Latest Updates (v2.0)
+## What's different in this fork
 
-- **Native Windows Auto-Updater (`svb-updater.exe`)**: A lightweight background tray application that automatically checks for mod updates on GitHub, fetches release notes, and interactively asks if you want to install them. It completely automates the hassle of manually copying files after every Vivaldi update!
-- **Folders for Tabs**: You can now group your tabs into fully functional, collapsible folders (just like Sidebery) that integrate seamlessly with the native Vivaldi workspace system. You can even pin folders, bringing the experience much closer to modern browsers like **Arc** or **Zen Browser**!
-- **Enhanced Context Menu**: The custom context menu has been completely redesigned. It now supports bulk actions for multiple selected tabs, moving entire trees between workspaces/windows, saving trees as Vivaldi bookmarks, and closing entire subtrees safely.
-- **Improved Stability & Anti-Orphan Logic**: Deeply improved tab synchronization prevents ghost tabs and infinite loops when Vivaldi naturally moves tabs between workspaces. Context locks prevent UI flickering during rapid bulk tab operations.
+### Gemini AI tab grouping removed
 
-## What It Does
+Upstream added Google Gemini tab grouping in v2.3.0. This fork removes it entirely, so the mod never makes a network call to an AI service and never asks for an API key.
+
+- Removed the Gemini API client, the `aiGroupTabs` store action, the header AI button and the "AI Tab Grouping" settings block.
+- Removed the toast notification system, which only the AI feature used.
+- Saved `geminiApiKey`, `geminiModel` and `geminiFolderLanguage` settings are deleted from storage the first time the mod loads, so an old key does not linger in your browser profile.
+- Everything else from upstream v2.3.8 (tree persistence, workspace fixes, side panel coexistence and so on) is unchanged.
+
+The upstream v2.3.0 notes in `CHANGELOG.md` are kept for history; see the `Unreleased` entry for the removal.
+
+### Debian/Ubuntu install instead of Arch
+
+Upstream's Linux installer set up a pacman hook. This fork replaces it with an APT hook. See [Linux (Debian/Ubuntu-based)](#linux-debianubuntu-based) below.
+
+- `install-linux.sh` symlinks `custom.js` and `svb-folder.html` from `dist/` into `~/.local/share/vivaldi-patch/`, so `npm run build` is picked up without reinstalling.
+- It installs `/etc/apt/apt.conf.d/99vivaldi-patch`, which re-applies the patch after every apt/dpkg run.
+
+### Not changed, but worth knowing
+
+- The Windows auto-updater (`updater/`) and its release workflow still point at the **upstream** repository. If you use `svb-updater.exe`, it will download upstream releases, **including the Gemini feature**. Windows users of this fork should use `patch-windows.bat` with a locally built `dist/custom.js` instead.
+- The macOS and Windows scripts are inherited from upstream and are untested here.
+
+## What It Does (inherited from upstream)
 
 - Adds a vertical tab panel with a Sidebery-like visual style.
 - Supports hierarchical tree tabs with nested parent/child relations.
@@ -46,11 +64,15 @@ dist/custom.js
 
 ## Installation
 
-### Windows (Recommended)
+### Windows
 
-The easiest way to install and maintain the mod on Windows is using the native **Auto-Updater** (`svb-updater.exe`). It sits quietly in your system tray, detects when Vivaldi updates, and automatically re-applies the mod for you. It also notifies you of new mod updates from GitHub!
+> **Fork note:** `svb-updater.exe` fetches upstream releases (which include Gemini). Prefer the manual patcher below with a locally built `dist/custom.js`.
 
-1. Download the `svb-updater.exe` file from the [Releases](https://github.com/R0STEFAN/Vivaldi-Tree-Style-Tabs/releases) page.
+Upstream's recommended way to install and maintain the mod on Windows is the native **Auto-Updater** (`svb-updater.exe`). It sits quietly in your system tray, detects when Vivaldi updates, and automatically re-applies the mod for you. It also notifies you of new mod updates from GitHub!
+
+**Upstream auto-updater (not recommended for this fork):**
+
+1. Download the `svb-updater.exe` file from the upstream [Releases](https://github.com/R0STEFAN/Vivaldi-Tree-Style-Tabs/releases) page.
 2. Place the file in a permanent folder where you want to keep it (e.g., `Documents\VivaldiTreeTabs`).
 3. Run `svb-updater.exe`. It will automatically download the required mod files from GitHub, find your Vivaldi installation, and apply the mod.
 4. *(Optional)* Right-click the tray icon and enable "Run on Startup" to ensure Vivaldi is always patched automatically.
