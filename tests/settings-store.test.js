@@ -69,32 +69,30 @@ describe('settingsStore - autoCloseTabsDays', () => {
   })
 })
 
-describe('settingsStore - Gemini AI settings', () => {
-  it('has correct defaults for Gemini settings in DEFAULT_SETTINGS', () => {
-    assert.strictEqual(DEFAULT_SETTINGS.geminiApiKey, '')
-    assert.strictEqual(DEFAULT_SETTINGS.geminiModel, 'gemini-2.5-flash')
-    assert.strictEqual(DEFAULT_SETTINGS.geminiFolderLanguage, 'uk')
-  })
-
-  it('defaults Gemini settings on fresh store', () => {
-    const store = createSettingsStore()
-    assert.strictEqual(store.get('geminiApiKey'), '')
-    assert.strictEqual(store.get('geminiModel'), 'gemini-2.5-flash')
-    assert.strictEqual(store.get('geminiFolderLanguage'), 'uk')
-  })
-
-  it('allows updating Gemini settings', () => {
-    settingsStore.set('geminiApiKey', 'AIzaSyTestKey')
-    settingsStore.set('geminiModel', 'gemini-2.0-flash')
-    settingsStore.set('geminiFolderLanguage', 'en')
-
-    assert.strictEqual(settingsStore.get('geminiApiKey'), 'AIzaSyTestKey')
-    assert.strictEqual(settingsStore.get('geminiModel'), 'gemini-2.0-flash')
-    assert.strictEqual(settingsStore.get('geminiFolderLanguage'), 'en')
-
-    // Clean up
-    settingsStore.set('geminiApiKey', '')
-    settingsStore.set('geminiModel', 'gemini-2.5-flash')
-    settingsStore.set('geminiFolderLanguage', 'uk')
+describe('settingsStore - legacy key cleanup', () => {
+  it('drops legacy AI keys on load and writes the cleaned settings back', async () => {
+    const stored = {
+      'svb-settings': { autoHideMode: 'full', geminiApiKey: 'legacy-key', geminiModel: 'x', geminiFolderLanguage: 'en' },
+    }
+    const previousChrome = global.chrome
+    global.chrome = {
+      storage: {
+        local: {
+          get: (key, cb) => cb({ [key]: stored[key] }),
+          set: (payload, cb) => { Object.assign(stored, payload); cb() },
+        },
+      },
+    }
+    try {
+      const store = createSettingsStore()
+      await store.init()
+      assert.strictEqual(store.get('geminiApiKey'), undefined)
+      assert.strictEqual(store.get('geminiModel'), undefined)
+      assert.strictEqual(store.get('geminiFolderLanguage'), undefined)
+      assert.strictEqual(store.get('autoHideMode'), 'full')
+      assert.deepStrictEqual(Object.keys(stored['svb-settings']).filter(k => k.startsWith('gemini')), [])
+    } finally {
+      global.chrome = previousChrome
+    }
   })
 })

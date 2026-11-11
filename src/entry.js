@@ -110,7 +110,6 @@ async function main() {
     },
     onToggleCollapse: id => { void store.toggleCollapsed(id) },
     onCollapseAll: () => { void store.collapseAll() },
-    onAiGroupTabs: () => store.aiGroupTabs(),
     onOpenContextMenu: id => {
       const selectedIds = latestSelectionState.selectedIds || []
       if (!selectedIds.includes(id)) {

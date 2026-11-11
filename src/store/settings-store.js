@@ -8,9 +8,21 @@ const DEFAULT_SETTINGS = {
   autoCloseTabsDays: 0,
   newTabPlacement: 'bottom',
   autoHideMode: 'full',
-  geminiApiKey: '',
-  geminiModel: 'gemini-2.5-flash',
-  geminiFolderLanguage: 'uk',
+}
+
+// Keys from the removed Gemini integration; dropped on load so a stored API key does not linger.
+const LEGACY_SETTING_KEYS = ['geminiApiKey', 'geminiModel', 'geminiFolderLanguage']
+
+function stripLegacySettings(settings) {
+  const cleaned = { ...settings }
+  let changed = false
+  for (const key of LEGACY_SETTING_KEYS) {
+    if (key in cleaned) {
+      delete cleaned[key]
+      changed = true
+    }
+  }
+  return { cleaned, changed }
 }
 
 function createSettingsStore() {
@@ -58,7 +70,9 @@ function createSettingsStore() {
       try {
         const saved = localStorage.getItem(SETTINGS_KEY)
         if (saved) {
-          currentSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(saved) }
+          const { cleaned, changed } = stripLegacySettings(JSON.parse(saved))
+          currentSettings = { ...DEFAULT_SETTINGS, ...cleaned }
+          if (changed) localStorage.setItem(SETTINGS_KEY, JSON.stringify(currentSettings))
         }
       } catch (e) {}
       return
@@ -67,12 +81,14 @@ function createSettingsStore() {
     try {
       const saved = await storageGet(area, SETTINGS_KEY)
       if (saved) {
-        currentSettings = { ...DEFAULT_SETTINGS, ...saved }
+        const { cleaned, changed } = stripLegacySettings(saved)
+        currentSettings = { ...DEFAULT_SETTINGS, ...cleaned }
+        if (changed) await storageSet(area, { [SETTINGS_KEY]: currentSettings })
       } else {
         // Migration from localStorage
         const legacy = localStorage.getItem(SETTINGS_KEY)
         if (legacy) {
-          currentSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(legacy) }
+          currentSettings = { ...DEFAULT_SETTINGS, ...stripLegacySettings(JSON.parse(legacy)).cleaned }
           await storageSet(area, { [SETTINGS_KEY]: currentSettings })
         }
       }

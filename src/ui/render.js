@@ -1,7 +1,6 @@
 const { settingsStore } = require('../store/settings-store.js')
 const { syncPinnedGrid } = require('./pinned-grid.js')
 const { syncWorkspaceStrip } = require('./workspace-strip.js')
-const { fetchAvailableModels } = require('../services/gemini-api.js')
 
 function getTabHoverTitle(tab, isActive) {
   let title = tab.title || ''
@@ -758,23 +757,6 @@ function renderCollapseAllIcon() {
   `
 }
 
-function renderSparklesIcon() {
-  return `
-    <svg class="svb-sparkles-icon" viewBox="0 0 16 16" aria-hidden="true">
-      <path fill="currentColor" d="M8 1.5l1.2 3.3 3.3 1.2-3.3 1.2L8 10.5l-1.2-3.3-3.3-1.2 3.3-1.2L8 1.5zm4.5 7.5l.6 1.65 1.65.6-1.65.6-.6 1.65-.6-1.65-1.65-.6 1.65-.6.6-1.65zM3.5 9l.6 1.65 1.65.6-1.65.6-.6 1.65-.6-1.65-1.65-.6 1.65-.6.6-1.65z"/>
-    </svg>
-  `
-}
-
-function renderAiSpinnerIcon() {
-  return `
-    <svg class="svb-ai-spinner-icon" viewBox="0 0 16 16" aria-hidden="true">
-      <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="2" stroke-opacity="0.25" />
-      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M8 2a6 6 0 0 1 6 6" />
-    </svg>
-  `
-}
-
 function createNodeFromHtml(html) {
   const template = document.createElement('template')
   template.innerHTML = html.trim()
@@ -799,7 +781,6 @@ function createSidebarRenderer(options) {
     onToggleMute,
     onToggleCollapse,
     onCollapseAll,
-    onAiGroupTabs,
     onSelectTab,
     onOpenContextMenu,
     onContextMenuAction,
@@ -821,7 +802,6 @@ function createSidebarRenderer(options) {
   let previousPanelPinned = null
   let previousIsSettingsOpen = false
   let previousCreatingWorkspace = false
-  let previousIsAiGroupingInProgress = false
   let previousNewTabPlacement = null
   let previousSelectedIds = []
   let previousDraggedIds = []
@@ -849,7 +829,6 @@ function createSidebarRenderer(options) {
   let creatingWorkspace = false
   let renamingWorkspaceId = null
   let pendingMoveToWorkspaceTarget = null
-  let isAiGroupingInProgress = false
   const eventController = new AbortController()
   const eventOptions = { signal: eventController.signal }
   const tabsById = new Map()
@@ -905,57 +884,6 @@ function createSidebarRenderer(options) {
     renderCurrent()
   }
 
-  let activeToastTimer = null
-
-  function showToast(message, type = 'info', duration = 3500) {
-    if (!shell || !shell.toastHost) return
-    const host = shell.toastHost
-
-    if (activeToastTimer) {
-      clearTimeout(activeToastTimer)
-      activeToastTimer = null
-    }
-
-    host.innerHTML = ''
-
-    const toast = document.createElement('div')
-    toast.className = `svb-toast svb-toast--${type}`
-
-    const msgSpan = document.createElement('span')
-    msgSpan.className = 'svb-toast__message'
-    msgSpan.textContent = message
-    toast.appendChild(msgSpan)
-
-    const closeBtn = document.createElement('button')
-    closeBtn.className = 'svb-toast__close'
-    closeBtn.type = 'button'
-    closeBtn.setAttribute('aria-label', 'Close')
-    closeBtn.innerHTML = '&times;'
-    closeBtn.addEventListener('click', (e) => {
-      e.stopPropagation()
-      dismissToast(toast)
-    })
-    toast.appendChild(closeBtn)
-
-    host.appendChild(toast)
-
-    if (duration > 0) {
-      activeToastTimer = setTimeout(() => {
-        dismissToast(toast)
-      }, duration)
-    }
-  }
-
-  function dismissToast(toast) {
-    if (!toast || !toast.parentNode) return
-    toast.classList.add('is-hiding')
-    setTimeout(() => {
-      if (toast && toast.parentNode) {
-        toast.parentNode.removeChild(toast)
-      }
-    }, 200)
-  }
-
   function startEditing(tabId) {
     if (!Number.isFinite(tabId)) return
     const tab = findTab(tabId)
@@ -976,12 +904,10 @@ function createSidebarRenderer(options) {
             <div class="svb-header__count">0</div>
           </div>
           <div class="svb-header__actions">
-            <button class="svb-icon-button" data-role="ai-group-tabs" title="AI: Group tabs into folders" aria-label="AI: Group tabs into folders"></button>
             <button class="svb-icon-button" data-role="collapse-all" title="Collapse all trees" aria-label="Collapse all trees"></button>
             <button class="svb-icon-button" data-role="toggle-pinned" title="Pin panel"></button>
           </div>
         </div>
-        <div class="svb-toast-host" aria-live="polite"></div>
 
         <div class="svb-main-view">
           <div class="svb-workspaces" style="display:none"></div>
@@ -1111,46 +1037,6 @@ function createSidebarRenderer(options) {
               </select>
             </div>
 
-            <div class="svb-settings-section-divider"></div>
-            <div class="svb-settings-title-sub">AI Tab Grouping (Gemini)</div>
-
-            <div class="svb-settings-group">
-              <div class="svb-settings-label-row">
-                <label class="svb-settings-label" for="svb-gemini-key">Gemini API Key</label>
-                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="svb-settings-link">Get Free Key</a>
-              </div>
-              <input type="password" id="svb-gemini-key" name="geminiApiKey" class="svb-settings-input" placeholder="AIzaSy..." autocomplete="off" spellcheck="false">
-              <div class="svb-settings-key-actions">
-                <button type="button" class="svb-settings-button-small" data-role="toggle-key-visibility" title="Show / Hide key">👁 Show key</button>
-              </div>
-            </div>
-
-            <div class="svb-settings-group">
-              <div class="svb-settings-label-row">
-                <label class="svb-settings-label">Model</label>
-                <button type="button" class="svb-settings-link-btn" data-role="refresh-gemini-models" title="Fetch models from API">↻ Refresh</button>
-              </div>
-              <select name="geminiModel" class="svb-settings-select">
-                <option value="gemini-2.5-flash">gemini-2.5-flash (Recommended)</option>
-                <option value="gemini-2.0-flash">gemini-2.0-flash</option>
-                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-                <option value="gemini-1.5-flash-8b">gemini-1.5-flash-8b</option>
-                <option value="gemini-2.5-pro">gemini-2.5-pro</option>
-              </select>
-            </div>
-
-            <div class="svb-settings-group">
-              <label class="svb-settings-label">Folder Naming Language</label>
-              <select name="geminiFolderLanguage" class="svb-settings-select">
-                <option value="uk">Українська</option>
-                <option value="en">English</option>
-                <option value="de">Deutsch</option>
-                <option value="pl">Polski</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-                <option value="auto">Auto (Match content)</option>
-              </select>
-            </div>
           </div>
         </div>
       </div>
@@ -1164,12 +1050,10 @@ function createSidebarRenderer(options) {
       mainView: root.querySelector('.svb-main-view'),
       workspaceBar: root.querySelector('.svb-workspaces'),
       settingsView: root.querySelector('.svb-settings-view'),
-      toastHost: root.querySelector('.svb-toast-host'),
       count: root.querySelector('.svb-header__count'),
       settingsButton: root.querySelector('[data-role="toggle-settings"]'),
       collapseAllButton: root.querySelector('[data-role="collapse-all"]'),
       pinButton: root.querySelector('[data-role="toggle-pinned"]'),
-      aiGroupButton: root.querySelector('[data-role="ai-group-tabs"]'),
       pinnedSection: root.querySelector('.svb-section--pinned'),
       pinnedGrid: root.querySelector('.svb-pinned-grid'),
       tabList: root.querySelector('.svb-tab-list'),
@@ -1415,19 +1299,6 @@ function createSidebarRenderer(options) {
     currentShell.collapseAllButton.className = `svb-icon-button${canCollapseAll ? '' : ' is-disabled'}`
     currentShell.collapseAllButton.disabled = !canCollapseAll
     currentShell.collapseAllButton.innerHTML = renderCollapseAllIcon()
-    if (currentShell.aiGroupButton) {
-      if (isAiGroupingInProgress) {
-        currentShell.aiGroupButton.className = 'svb-icon-button is-loading'
-        currentShell.aiGroupButton.disabled = true
-        currentShell.aiGroupButton.innerHTML = renderAiSpinnerIcon()
-        currentShell.aiGroupButton.title = 'AI is grouping tabs...'
-      } else {
-        currentShell.aiGroupButton.className = 'svb-icon-button'
-        currentShell.aiGroupButton.disabled = false
-        currentShell.aiGroupButton.innerHTML = renderSparklesIcon()
-        currentShell.aiGroupButton.title = 'AI: Group tabs into folders (Gemini)'
-      }
-    }
     currentShell.pinButton.className = `svb-icon-button${state.panelPinned ? ' is-active' : ''}`
     currentShell.pinButton.title = state.panelPinned ? 'Unpin panel' : 'Pin panel'
     currentShell.pinButton.innerHTML = renderPinIcon(state.panelPinned)
@@ -1565,7 +1436,6 @@ function createSidebarRenderer(options) {
       previousPanelPinned !== state.panelPinned
       || previousIsSettingsOpen !== isSettingsOpen
       || previousCreatingWorkspace !== creatingWorkspace
-      || previousIsAiGroupingInProgress !== isAiGroupingInProgress
     ) {
       updateShellControls(currentShell, state, treeTabs)
     } else {
@@ -2214,120 +2084,6 @@ function createSidebarRenderer(options) {
         ? latestState.activeTabId
         : null
       onCreateChildTab(tabId)
-      return
-    }
-    if (role === 'ai-group-tabs') {
-      event.preventDefault()
-      event.stopPropagation()
-      const apiKey = settingsStore.get('geminiApiKey')
-      if (!apiKey || !apiKey.trim()) {
-        showToast('⚠️ Please enter a Gemini API Key in Settings.', 'warning', 4000)
-        isSettingsOpen = true
-        renderCurrent()
-        setTimeout(() => {
-          const input = root.querySelector('.svb-settings-view input[name="geminiApiKey"]')
-          if (input) {
-            input.focus()
-            input.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          }
-        }, 50)
-        return
-      }
-
-      if (isAiGroupingInProgress) return
-      isAiGroupingInProgress = true
-
-      try {
-        updateShellControls(shell, latestState, latestTreeTabs)
-      } catch (err) {
-        console.warn('[svb-ui] Failed to update shell controls before AI grouping', err)
-      }
-
-      Promise.resolve()
-        .then(async () => {
-          if (!onAiGroupTabs) return
-          const res = await onAiGroupTabs()
-          if (!res) return
-
-          if (res.success) {
-            if (res.count > 0) {
-              const fCount = res.foldersCount || 1
-              showToast(
-                `✨ Organized ${res.count} tab${res.count === 1 ? '' : 's'} into ${fCount} folder${fCount === 1 ? '' : 's'}!`,
-                'success',
-                4000
-              )
-            } else {
-              showToast('✨ All tabs are already organized in folders.', 'info', 3500)
-            }
-          } else {
-            if (res.reason === 'missing-key') {
-              showToast('⚠️ Please enter a Gemini API Key in Settings.', 'warning', 4000)
-              isSettingsOpen = true
-            } else if (res.reason === 'not-enough-tabs') {
-              showToast('⚠️ At least 2 tabs are required for AI grouping.', 'warning', 3500)
-            } else if (res.reason === 'api-error') {
-              showToast(`❌ AI grouping failed: ${res.error || 'API error'}`, 'error', 5000)
-            } else {
-              showToast('❌ Failed to group tabs.', 'error', 4000)
-            }
-          }
-        })
-        .catch(err => {
-          console.error('[svb-ui] AI grouping error', err)
-          showToast(`❌ Error: ${err.message || 'Something went wrong'}`, 'error', 5000)
-        })
-        .finally(() => {
-          isAiGroupingInProgress = false
-          if (shell) {
-            try {
-              updateShellControls(shell, latestState, latestTreeTabs)
-            } catch (_e) {
-              void _e
-            }
-          }
-          renderCurrent()
-        })
-      return
-    }
-    if (role === 'toggle-key-visibility') {
-      event.preventDefault()
-      event.stopPropagation()
-      const keyInput = shell && shell.settingsView ? shell.settingsView.querySelector('input[name="geminiApiKey"]') : null
-      const btn = event.target.closest('[data-role="toggle-key-visibility"]')
-      if (keyInput) {
-        const isPassword = keyInput.type === 'password'
-        keyInput.type = isPassword ? 'text' : 'password'
-        if (btn) {
-          btn.textContent = isPassword ? '🙈 Hide key' : '👁 Show key'
-        }
-      }
-      return
-    }
-    if (role === 'refresh-gemini-models') {
-      event.preventDefault()
-      event.stopPropagation()
-      const apiKey = settingsStore.get('geminiApiKey')
-      if (!apiKey || !apiKey.trim()) return
-      const btn = event.target.closest('[data-role="refresh-gemini-models"]')
-      if (btn) btn.textContent = '⏳ Loading...'
-      fetchAvailableModels(apiKey)
-        .then(models => {
-          const select = shell && shell.settingsView ? shell.settingsView.querySelector('select[name="geminiModel"]') : null
-          if (select && models.length > 0) {
-            const currentVal = settingsStore.get('geminiModel')
-            select.innerHTML = models.map(m => `<option value="${m}">${m}${m === 'gemini-2.5-flash' ? ' (Recommended)' : ''}</option>`).join('')
-            if (models.includes(currentVal)) {
-              select.value = currentVal
-            } else {
-              select.value = models[0]
-              settingsStore.set('geminiModel', models[0])
-            }
-          }
-        })
-        .finally(() => {
-          if (btn) btn.textContent = '↻ Refresh'
-        })
       return
     }
     if (role === 'collapse-all') {
@@ -3006,7 +2762,6 @@ function createSidebarRenderer(options) {
       previousPanelPinned = state.panelPinned
       previousIsSettingsOpen = isSettingsOpen
       previousCreatingWorkspace = creatingWorkspace
-      previousIsAiGroupingInProgress = isAiGroupingInProgress
       previousNewTabPlacement = currentNewTabPlacement
       previousSelectedIds = visualState.selectedIds.slice()
       previousDraggedIds = visualState.draggedIds.slice()
@@ -3022,10 +2777,6 @@ function createSidebarRenderer(options) {
     },
 
     dispose() {
-      if (activeToastTimer) {
-        clearTimeout(activeToastTimer)
-        activeToastTimer = null
-      }
       if (pinnedGridObserver) pinnedGridObserver.disconnect()
       if (workspaceBarObserver) workspaceBarObserver.disconnect()
       eventController.abort()
