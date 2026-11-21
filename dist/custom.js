@@ -1151,7 +1151,7 @@ body.svb-is-resizing {
   min-width: 0;
   flex: 1;
   overflow: hidden;
-  font-size: 13px;
+  font-size: var(--svb-tab-title-font-size, 13px);
   font-weight: 400;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -1170,6 +1170,7 @@ body.svb-is-resizing {
   background: color-mix(in srgb, var(--svb-bg-elevated) 86%, var(--svb-accent-soft));
   color: var(--svb-text-strong);
   font: inherit;
+  font-size: var(--svb-tab-title-font-size, 13px);
   line-height: 1.3;
 }
 
@@ -2039,6 +2040,7 @@ const DEFAULT_SETTINGS = {
   autoCloseTabsDays: 0,
   newTabPlacement: 'bottom',
   autoHideMode: 'full',
+  tabTitleFontSize: 13,
 }
 
 // Keys from the removed Gemini integration; dropped on load so a stored API key does not linger.
@@ -10172,6 +10174,17 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;')
 }
 
+// <select> and <input> values arrive as strings; settings whose values are
+// numbers need converting before they reach the store.
+const NUMERIC_SETTING_KEYS = new Set(['autoCloseTabsDays', 'tabTitleFontSize'])
+
+// Single source of truth for the Settings dropdown and its store roundtrip tests.
+const TAB_TITLE_FONT_SIZES = [11, 12, 13, 14, 15, 16, 18, 20, 22, 24]
+
+function normalizeSettingValue(name, rawValue) {
+  return NUMERIC_SETTING_KEYS.has(name) ? Number(rawValue) : rawValue
+}
+
 const TAB_COLOR_SWATCHES = {
   rose: 'hsl(350deg 72% 64%)',
   amber: 'hsl(34deg 92% 60%)',
@@ -11162,6 +11175,12 @@ function createSidebarRenderer(options) {
               </div>
             </div>
             <div class="svb-settings-group">
+              <label class="svb-settings-label">Tab title font size</label>
+              <select name="tabTitleFontSize" class="svb-settings-select">
+                ${TAB_TITLE_FONT_SIZES.map(size => `<option value="${size}">${size} px${size === 13 ? ' (default)' : ''}</option>`).join('\n                ')}
+              </select>
+            </div>
+            <div class="svb-settings-group">
               <label class="svb-settings-label">Auto-close old tabs & trees</label>
               <select name="autoCloseTabsDays" class="svb-settings-select">
                 <option value="0">Never</option>
@@ -11445,6 +11464,11 @@ function createSidebarRenderer(options) {
     currentShell.settingsButton.innerHTML = renderMenuIcon('settings')
 
     syncWorkspaceBar(currentShell, state)
+
+    // The title and rename input inherit this variable from the frame. Apply
+    // it on every render so a settings change takes effect immediately.
+    const tabTitleFontSize = Number(settingsStore.get('tabTitleFontSize')) || 13
+    currentShell.frame.style.setProperty('--svb-tab-title-font-size', `${tabTitleFontSize}px`)
 
     const isTopMode = (settingsStore.get('newTabPlacement') || 'bottom') === 'top'
     currentShell.frame.classList.toggle('is-top-mode', isTopMode)
@@ -12248,8 +12272,7 @@ function createSidebarRenderer(options) {
     if (!field || !field.name) return
 
     const rawValue = field.type === 'checkbox' ? field.checked : field.value
-    const value = field.name === 'autoCloseTabsDays' ? Number(rawValue) : rawValue
-    settingsStore.set(field.name, value)
+    settingsStore.set(field.name, normalizeSettingValue(field.name, rawValue))
     renderCurrent()
   }, eventOptions)
 
@@ -12934,7 +12957,7 @@ function createSidebarRenderer(options) {
   }
 }
 
-module.exports = { createSidebarRenderer, renderContextMenu }
+module.exports = { createSidebarRenderer, renderContextMenu, normalizeSettingValue, TAB_TITLE_FONT_SIZES }
 
     },
     "diagnostics/activation-trace.js": function(require, module, exports) {

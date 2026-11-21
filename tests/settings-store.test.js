@@ -1,6 +1,7 @@
 const { describe, it, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const { settingsStore, createSettingsStore, DEFAULT_SETTINGS } = require('../src/store/settings-store.js')
+const { TAB_TITLE_FONT_SIZES } = require('../src/ui/render.js')
 
 describe('settingsStore - newTabPlacement', () => {
   beforeEach(() => {
@@ -65,6 +66,28 @@ describe('settingsStore - autoCloseTabsDays', () => {
     for (const days of dayOptions) {
       settingsStore.set('autoCloseTabsDays', days)
       assert.strictEqual(settingsStore.get('autoCloseTabsDays'), days)
+    }
+  })
+})
+
+describe('settingsStore - tabTitleFontSize', () => {
+  beforeEach(() => {
+    settingsStore.set('tabTitleFontSize', 13)
+  })
+
+  it('has tabTitleFontSize 13 in DEFAULT_SETTINGS', () => {
+    assert.strictEqual(DEFAULT_SETTINGS.tabTitleFontSize, 13)
+  })
+
+  it('defaults tabTitleFontSize to 13 on fresh store', () => {
+    const store = createSettingsStore()
+    assert.strictEqual(store.get('tabTitleFontSize'), 13)
+  })
+
+  it('allows updating tabTitleFontSize through every dropdown option', () => {
+    for (const size of TAB_TITLE_FONT_SIZES) {
+      settingsStore.set('tabTitleFontSize', size)
+      assert.strictEqual(settingsStore.get('tabTitleFontSize'), size)
     }
   })
 })

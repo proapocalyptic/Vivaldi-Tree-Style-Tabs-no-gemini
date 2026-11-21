@@ -8,6 +8,7 @@ const DEFAULT_SETTINGS = {
   autoCloseTabsDays: 0,
   newTabPlacement: 'bottom',
   autoHideMode: 'full',
+  tabTitleFontSize: 13,
 }
 
 // Keys from the removed Gemini integration; dropped on load so a stored API key does not linger.

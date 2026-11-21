@@ -1117,7 +1117,7 @@ body.svb-is-resizing {
   min-width: 0;
   flex: 1;
   overflow: hidden;
-  font-size: 13px;
+  font-size: var(--svb-tab-title-font-size, 13px);
   font-weight: 400;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -1136,6 +1136,7 @@ body.svb-is-resizing {
   background: color-mix(in srgb, var(--svb-bg-elevated) 86%, var(--svb-accent-soft));
   color: var(--svb-text-strong);
   font: inherit;
+  font-size: var(--svb-tab-title-font-size, 13px);
   line-height: 1.3;
 }
 
