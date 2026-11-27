@@ -4,7 +4,7 @@
 
 A fork of [R0STEFAN/Vivaldi-Tree-Style-Tabs](https://github.com/R0STEFAN/Vivaldi-Tree-Style-Tabs), a Sidebery-inspired vertical tree tab panel for Vivaldi. It is not a browser extension: it is a `custom.js` UI modification loaded into Vivaldi's `window.html`.
 
-This fork tracks upstream **v2.3.9** and differs in four ways: the Gemini AI integration is removed, the Linux install targets Debian-based systems, Settings has a tab title font size selector, and the Windows updater checks this fork's releases.
+This fork tracks upstream **v2.3.9** and differs in four ways: primarily the Gemini AI integration is removed, the Linux install targets Debian-based systems, Settings has a tab title font size selector, and the Windows updater checks this fork's releases instead of upstream.
 
 **This fork is source-only: it publishes no prebuilt releases.** Build it yourself with `npm run build` (see [Installation](#installation)).
 
