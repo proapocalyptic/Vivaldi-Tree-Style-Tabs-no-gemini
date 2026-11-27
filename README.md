@@ -4,7 +4,7 @@
 
 A fork of [R0STEFAN/Vivaldi-Tree-Style-Tabs](https://github.com/R0STEFAN/Vivaldi-Tree-Style-Tabs), a Sidebery-inspired vertical tree tab panel for Vivaldi. It is not a browser extension: it is a `custom.js` UI modification loaded into Vivaldi's `window.html`.
 
-This fork tracks upstream **v2.3.8** and differs in two ways: the Gemini AI integration is removed, and the Linux install targets Debian-based systems.
+This fork tracks upstream **v2.3.9** and differs in four ways: the Gemini AI integration is removed, the Linux install targets Debian-based systems, Settings has a tab title font size selector, and the Windows updater checks this fork's releases.
 
 **This fork is source-only: it publishes no prebuilt releases.** Build it yourself with `npm run build` (see [Installation](#installation)).
 
@@ -17,9 +17,9 @@ Upstream added Google Gemini tab grouping in v2.3.0. This fork removes it entire
 - Removed the Gemini API client, the `aiGroupTabs` store action, the header AI button and the "AI Tab Grouping" settings block.
 - Removed the toast notification system, which only the AI feature used.
 - Saved `geminiApiKey`, `geminiModel` and `geminiFolderLanguage` settings are deleted from storage the first time the mod loads, so an old key does not linger in your browser profile.
-- Everything else from upstream v2.3.8 (tree persistence, workspace fixes, side panel coexistence and so on) is unchanged.
+- Everything else from upstream v2.3.9 (tree persistence, workspace fixes, side panel coexistence, popup/window isolation, web-panel filtering, native detach and so on) is unchanged.
 
-The upstream v2.3.0 notes in `CHANGELOG.md` are kept for history; see the `Unreleased` entry for the removal.
+The upstream v2.3.0 notes in `CHANGELOG.md` are kept for history; see the `v2.3.9-nogemini` entry for the removal.
 
 ### Debian/Ubuntu install instead of Arch
 
@@ -28,7 +28,11 @@ Upstream's Linux installer set up a pacman hook. This fork replaces it with an A
 - `install-linux.sh` symlinks `custom.js` and `svb-folder.html` from `dist/` into `~/.local/share/vivaldi-patch/`, so `npm run build` is picked up without reinstalling.
 - It installs `/etc/apt/apt.conf.d/99vivaldi-patch`, which re-applies the patch after every apt/dpkg run.
 
-### Not changed, but worth knowing
+### Tab title font size selector
+
+This fork adds a "Tab title font size" dropdown in Settings (11–24 px, default 13). The selected size is applied immediately to tab titles through a CSS variable; it is independent of upstream's settings.
+
+### Other fork behavior worth knowing
 
 - The Windows auto-updater (`updater/`) now checks **this fork's** GitHub releases (`proapocalyptic/Vivaldi-Tree-Style-Tabs-no-gemini`) instead of upstream's, so it never pulls in Gemini. Because this fork publishes no releases, a self-compiled updater has nothing to download and will report an error when checking for updates. Its Vivaldi-update watching still works, since it patches using the `custom.js` embedded when you built it. Do not use upstream's prebuilt `svb-updater.exe`: it installs the Gemini version.
 - The macOS and Windows scripts are inherited from upstream and are untested here.

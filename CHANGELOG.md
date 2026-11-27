@@ -1,8 +1,22 @@
-# Unreleased
+# Release Notes (v2.3.9-nogemini)
 
-## 🗑️ Removed
+This fork now tracks upstream **v2.3.9**.
+
+## 🛠️ Fixes & Improvements from upstream v2.3.9
+
+* **Detach Tabs to New Window**: Detach tabs into new windows via the native Vivaldi API and fix multi-tab fallback creation.
+* **Web Panel Tabs**: Hide Vivaldi web panel tabs (`panelId`) from the tab tree and preserve them during new-window cleanup.
+* **Popup & Window Isolation**: Skip mounting in popup/DevTools windows and filter tab events by `windowId`.
+
+## 🗑️ Removed in this fork
 
 * **Gemini AI Tab Grouping**: Removed the Gemini integration (API client, header AI button, settings panel, and toast notifications). Saved `geminiApiKey`, `geminiModel` and `geminiFolderLanguage` settings are deleted from storage on load. The v2.3.0 notes below are kept for history.
+
+## 🔄 Fork-specific changes
+
+* **Linux installer**: Targets Debian/Ubuntu with an APT post-invoke hook and symlinked build output, instead of upstream's pacman hook.
+* **Windows updater**: Checks this fork's releases instead of upstream's, so it never pulls in Gemini.
+* **Tab title font size**: Settings includes a font-size selector for tab titles (fork addition retained in this release).
 
 ---
 
